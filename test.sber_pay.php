@@ -62,7 +62,10 @@ if ($do == 'gotopay') {
 
     if ($status['orderStatus'] < 2) {
         $isok = false;
-        $error = 'Ожидается ответ от банка ... <script>setTimeout(function() {location.reload(true)}, 3000)</script>';
+        $error = '<p>Ожидается ответ от банка ... </p>';
+        $error .= '<script>setTimeout(function() {location.reload(true)}, 3000)</script>';
+        $error .= '<p>'.$status['orderStatus'].'</p>';
+        $error .=  $status_text[$status['orderStatus']];;
     }
     if ($status['orderStatus'] > 2) {
         $isok = false;
@@ -74,10 +77,10 @@ if ($do == 'gotopay') {
         echo '<h1>Оплата заказа №'.$_REQUEST['orderNumber'].' прошла успешно</h1>';
     } else {
         /* К нам пришла оплата которая не зарегистрирована в системе */
-        echo '<h1>Оплата не зарегистрирована в системе</h1>';
+        echo $error;
     }
 } elseif ($do == 'fail') {
-    /* Страница успешной оплаты */
+    /* Страница НЕуспешной оплаты */
     echo '<h1>Оплата не прошла</h1>';
 }
 if ($do == '') {
