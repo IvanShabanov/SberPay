@@ -50,6 +50,8 @@ if ($do == 'gotopay') {
     ];
     $status = $SBERPAY->getOrderStatus($params);
 
+    $sbResult = json_decode($status['content'], true);
+
     $status_text = array(
         0 => 'Заказ зарегистрирован, но не оплачен',
         1 => 'Предавторизованная сумма захолдирована (для двухстадийных платежей)',
@@ -60,16 +62,16 @@ if ($do == 'gotopay') {
         6 => 'Авторизация отклонена'
     );
 
-    if ($status['orderStatus'] < 2) {
+    if ($sbResult['orderStatus'] < 2) {
         $isok = false;
         $error = '<p>Ожидается ответ от банка ... </p>';
         $error .= '<script>setTimeout(function() {location.reload(true)}, 3000)</script>';
-        $error .= '<p>'.$status['orderStatus'].'</p>';
-        $error .=  $status_text[$status['orderStatus']];;
+        $error .= '<p>'.$sbResult['orderStatus'].'</p>';
+        $error .=  $status_text[$sbResult['orderStatus']];;
     }
-    if ($status['orderStatus'] > 2) {
+    if ($sbResult['orderStatus'] > 2) {
         $isok = false;
-        $error = $status_text[$status['orderStatus']];
+        $error = $status_text[$sbResult['orderStatus']];
     }
 
     if ($isok) {
